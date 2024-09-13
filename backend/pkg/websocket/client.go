@@ -1,9 +1,11 @@
 package websocket
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
 
@@ -14,9 +16,9 @@ type Client struct {
 }
 
 type Message struct {
-	ID   string
-	Body string `json:"body"`
-	Type int    `json:"type"`
+	ID     string `json:"id"`
+	Sender string `json:"sender"`
+	Body   string `json:"content"`
 }
 
 func (c *Client) Read() {
@@ -25,13 +27,27 @@ func (c *Client) Read() {
 		c.Conn.Close()
 	}()
 
+	type parameters struct {
+		Sender  string `json:"sender"`
+		Content string `json:"content"`
+	}
+
 	for {
-		messageType, p, err := c.Conn.ReadMessage()
+		_, p, err := c.Conn.ReadMessage()
 		if err != nil {
 			log.Println(err)
 			break
 		}
-		c.Pool.Broadcast <- Message{ID: c.ID, Body: string(p), Type: messageType}
+
+		params := parameters{}
+		err = json.Unmarshal(p, &params)
+		if err != nil {
+			log.Println(err)
+			break
+		}
+
+		id := uuid.New().String()
+		c.Pool.Broadcast <- Message{ID: id, Sender: params.Sender, Body: params.Content}
 		fmt.Printf("Message Received: %+v\n", string(p))
 	}
 }

@@ -2,6 +2,8 @@ package websocket
 
 import (
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type Pool struct {
@@ -27,14 +29,15 @@ func (pool *Pool) Start() {
 			pool.Clients[client] = true
 			fmt.Println("size of connection pool:", len(pool.Clients))
 			for client := range pool.Clients {
-				fmt.Println(client)
-				client.Conn.WriteJSON(Message{Type: 1, Body: "New User joined..."})
+				id := uuid.New().String()
+				client.Conn.WriteJSON(Message{ID: id, Body: "New User joined..."})
 			}
 		case client := <-pool.Unregister:
 			delete(pool.Clients, client)
 			fmt.Println("size of connection pool:", len(pool.Clients))
 			for client := range pool.Clients {
-				client.Conn.WriteJSON(Message{Type: 1, Body: "User Disconnected..."})
+				id := uuid.New().String()
+				client.Conn.WriteJSON(Message{ID: id, Body: "User Disconnected..."})
 			}
 		case message := <-pool.Broadcast:
 			fmt.Println("Sending message to all clients in pool")
