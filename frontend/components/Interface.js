@@ -48,13 +48,6 @@ export default function Component() {
     setNewMessage('')
   }
 
-  const contacts = [
-    { id: 1, name: 'Alice Johnson', status: 'online', avatar: '/placeholder.svg?height=32&width=32' },
-    { id: 2, name: 'Bob Smith', status: 'offline', avatar: '/placeholder.svg?height=32&width=32' },
-    { id: 3, name: 'Charlie Brown', status: 'online', avatar: '/placeholder.svg?height=32&width=32' },
-    { id: 4, name: 'Diana Prince', status: 'away', avatar: '/placeholder.svg?height=32&width=32' },
-  ]
-
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       {/* Main Chat Area */}
