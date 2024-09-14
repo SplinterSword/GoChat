@@ -1,7 +1,7 @@
 import React from 'react'
 import Interface from "@/components/Interface";
 
-const page = (params) => {
+const page = () => {
   return (
     <div>
       <Interface />

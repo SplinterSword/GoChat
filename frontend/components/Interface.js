@@ -1,11 +1,12 @@
 'use client'
 import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Send, Menu } from 'lucide-react'
+
 
 const socket = new WebSocket('ws://localhost:8080/ws');
 
@@ -22,6 +23,7 @@ export default function Component() {
   const [newMessage, setNewMessage] = useState("")
   const [Messages, setMessages] = useState([])
 
+  
   const params = useSearchParams()
   const username = params.get('username')
   
@@ -55,27 +57,6 @@ export default function Component() {
 
   return (
     <div className="flex h-screen bg-gray-900 text-white">
-      {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'block' : 'hidden'} md:block w-64 bg-gray-800 p-4`}>
-        <h2 className="text-xl font-bold mb-4">Contacts</h2>
-        <ScrollArea className="h-[calc(100vh-8rem)]">
-          {contacts.map((contact) => (
-            <div key={contact.id} className="flex items-center space-x-4 mb-4">
-              <Avatar>
-                <AvatarImage src={contact.avatar} alt={contact.name} />
-                <AvatarFallback>{contact.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-medium">{contact.name}</p>
-                <p className={`text-sm ${contact.status === 'online' ? 'text-green-400' : contact.status === 'away' ? 'text-yellow-400' : 'text-gray-400'}`}>
-                  {contact.status}
-                </p>
-              </div>
-            </div>
-          ))}
-        </ScrollArea>
-      </div>
-
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Chat Header */}
@@ -83,7 +64,7 @@ export default function Component() {
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <Menu className="h-6 w-6" />
           </Button>
-          <h1 className="text-xl font-bold">Chat with Sparsh Jain</h1>
+          <h1 className="text-xl font-bold">Chat with GoChat</h1>
         </div>
 
         {/* Messages */}
@@ -91,8 +72,8 @@ export default function Component() {
           {Messages.map((message) => (
             <div key={message.id} className={`mb-4 ${message.sender === username ? 'text-right' : ''}`}>
               <div className={`inline-block p-2 rounded-lg ${message.sender === username ? 'bg-blue-600' : 'bg-gray-700'}`}>
+                <p>{message.sender}</p>
                 <p>{message.content}</p>
-                <p className="text-xs text-gray-400 mt-1">10:00 AM</p>
               </div>
             </div>
           ))}
