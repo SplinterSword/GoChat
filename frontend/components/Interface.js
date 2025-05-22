@@ -7,7 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Send, Menu } from 'lucide-react'
 
 
-const socket = new WebSocket('ws://backend-100978797550.us-central1.run.app/ws');
+const socket = new WebSocket('ws://gochat-backend-544519275637.asia-northeast1.run.app/ws');
 
 socket.onopen = () => {
   console.log('WebSocket connection opened');
