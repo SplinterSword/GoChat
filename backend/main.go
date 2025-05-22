@@ -37,7 +37,7 @@ func setupRoutes() {
 func main() {
 	setupRoutes()
 	fmt.Println("Chat Backend server is listening on http://localhost:8080")
-	
+
 	// Create a CORS middleware
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"}, // Allow all origins
@@ -45,7 +45,7 @@ func main() {
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
 	})
-	
+
 	// Wrap the default ServeMux with CORS middleware
 	http.ListenAndServe(":8080", c.Handler(http.DefaultServeMux))
 }
