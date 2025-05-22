@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/SplinterSword/GoChat/backend/pkg/websocket"
+	"github.com/rs/cors"
 )
 
 func serveWS(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
@@ -36,5 +37,15 @@ func setupRoutes() {
 func main() {
 	setupRoutes()
 	fmt.Println("Chat Backend server is listening on http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	
+	// Create a CORS middleware
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"}, // Allow all origins
+		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
+	
+	// Wrap the default ServeMux with CORS middleware
+	http.ListenAndServe(":8080", c.Handler(http.DefaultServeMux))
 }
